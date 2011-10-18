@@ -1,6 +1,6 @@
 DataPress 2
 ===========
 
-This repository will contain a rewrite of DataPress (original repository on [http://code.google.com/p/datapress][Google Code].
+This repository will contain a rewrite of DataPress (original repository on [Google Code](http://code.google.com/p/datapress).
 
 
