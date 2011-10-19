@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Datapress Editor</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="../lib/css/bootstrap.min.css" rel="stylesheet">
+    <script src="../lib/js/jquery.min.js"></script>
+    <script src="../lib/js/bootstrap-tabs.js"></script>
+    <script src="../lib/js/bootstrap-alerts.js"></script>
+
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+  </head>
+
+  <body>
+
+
+    <div class="container">
+    <h1>Editor Development Page</h1>
+
+      <!-- Example row of columns -->
+      <div class="row">
+       
+
+<p>Note: the pieces that will get injected into the DP Build are between the <code>EDITOR-BEGIN</code> and <code>EDITOR-END</code> tags.
+<p>Goal is to have a modal interface: we start out with the list of data items (and the add data item button)
+<p><ul><li>If they press trash, they get a confirmation alert that, if YES, will delete the item.
+<li>If they press pencil, it opens editor
+<hr />
+<!-- EDITOR-BEGIN -->
+<ul>
+  <li>Trip
+      <img style="margin-left: 5px; vertical-align: middle" src="../lib/img/pencil_16.png" />
+      <img style="margin-left: 5px; vertical-align: middle" src="../lib/img/trash_16.png" /></li>
+  <li>Hike
+      <img style="margin-left: 5px; vertical-align: middle" src="../lib/img/pencil_16.png" />
+      <img style="margin-left: 5px; vertical-align: middle" src="../lib/img/trash_16.png" /></li>
+  <li style="list-style-type: none; margin-top: 10px;"><a href="#" class="btn small">Add new data item</a>
+</ul>
+<h3>Add New Data Item</h3>
+
+<div class="actions">
+   <input type="submit" class="btn primary" value="Save changes">&nbsp;<button type="reset" class="btn">Cancel</button>
+</div>
+<!-- EDITOR-END -->
+
+
+      </div>
+
+      <footer>
+        <p>&copy; Company 2011</p>
+      </footer>
+
+    </div> <!-- /container -->
+
+  </body>
+</html>
