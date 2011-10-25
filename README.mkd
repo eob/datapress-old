@@ -1,19 +1,21 @@
-DataPress 2
-===========
+Datapress
+=========
 
-This repository will contain a rewrite of DataPress (original repository on [Google Code](http://code.google.com/p/datapress)).
+Datapress provides rich, interactive data visualization and sharing capabilities for Wordpress blogs.
 
 Running
 -------
 
 To run datapress:
 
-   * Visit [our page][https://wordpress.org/extend/plugins/datapress/]on the Wordpress Plugin site
+   * Visit [our page](https://wordpress.org/extend/plugins/datapress/) on the Wordpress Plugin site
    * Download the most recent version
    * Unzip the file into your Wordpress plugin directory (`WP_ROOT/wp-content/plugins`)
 
 Notes for Developers
 --------------------
+
+### Building the Plugin
 
 Datapress has a package script that takes the code in this repository and assembles the plugin. The reason for this is that, for testing reasons, it is easier to develop some portions of the plugin as stand-alone web pages, and then to have the important pieces of these pages ripped out and injected into the plugin code. This also helps us enforce a nice client/server separation of components.
 
@@ -22,3 +24,7 @@ The packager script will help you develop while testing against a live WordPress
     python package.py --blast --o WP_ROOT/wp-content/plugins/datapress
 
 The script will remove the existing directory (the `--blast` option), copy in the `plugin-scaffold` directory, and then compile in the remaining files necessary for the plugin.
+
+### Original Codebase
+
+The github-hosted code here is a rewrite of the original [original Datapress plugin](http://code.google.com/p/datapress), hosted on Google Code.
