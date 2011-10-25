@@ -3,4 +3,11 @@ DataPress 2
 
 This repository will contain a rewrite of DataPress (original repository on [Google Code](http://code.google.com/p/datapress)).
 
+Developing
+----------
 
+The packager script will help you develop while testing against a live WordPress installation. To do so, create the directory `WP_ROOT/wp-content/plugins/datapress`. Then, any time you want to deploy the latest version of your code to that directory, run:
+
+    python package.py --blast --o WP_ROOT/wp-content/plugins/datapress
+
+The script will remove the existing directory (the `--blast` option), copy in the `plugin-scaffold` directory, and then compile in the remaining files necessary for the plugin.
