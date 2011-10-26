@@ -8,18 +8,22 @@ Author: The Haystack Group @ MIT
 Author URI: http://haystack.csail.mit.edu/
 */
 
-include_once("datapress-editor.php");
+include_once("data-editor.php");
+include_once("viz-editor.php");
 
 class Datapress {
   
-  var $datapress_editor;
+  var $viz_editor;
+  var $data_editor;
 
   function Datapress() {
-    $this->datapress_editor = new DatapressEditor();
+    $this->viz_editor = new DatapressVizEditor();
+    $this->data_editor = new DatapressDataEditor();
   }
 
   function Bootup() {
-    $this->datapress_editor->Bootup();
+    $this->viz_editor->Bootup();
+    $this->data_editor->Bootup();
   }
 }
 
