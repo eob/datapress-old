@@ -23,8 +23,26 @@ The packager script will help you develop while testing against a live WordPress
 
     python package.py --blast --outputdir WP_ROOT/wp-content/plugins/datapress
 
-The script will remove the existing directory (the `--blast` option), copy in the `plugin-scaffold` directory, and then compile in the remaining files necessary for the plugin.
+The script will remove the existing directory (the `--blast` option), copy in the `plugin-scaffold` directory, and then compile in the remaining files necessary for the plugin. The "compilation" step is simple string substitution. The script will iterate over all .php files in the output directory and search for the pattern `##INCLUDE:{file}:{region}` and performa a string substitution from the appropriate place. The file spec is relative to the root of the project.
 
+Regions are defined within HTML comment tags.
+    
+    <!-- begin-region:{REGION NAME} -->
+    <!-- end-region:{REGION NAME} -->
+
+So, for eample, if some file in `viz-editor/foo.html' had the following spec:
+
+    <!-- begin-region:BAR -->
+    <p>Hi</p>
+    <!-- end-region:BAR -->
+
+Then the code
+    
+    $editorHtml = <<<HTML
+    ##INCLUDE:../viz-editor/editor.html:EDITOR
+    HTML;
+
+Would result in the `$editorHtml` variable getting set to `<p>Hi</p>`
 ### Original Codebase
 
 The github-hosted code here is a rewrite of the original [original Datapress plugin](http://code.google.com/p/datapress), hosted on Google Code.
