@@ -16,12 +16,129 @@
     <script src="../lib/js/jquery.min.js"></script>
     <script src="../lib/js/bootstrap-tabs.js"></script>
     <script src="../lib/js/bootstrap-alerts.js"></script>
+    <script src="../lib/js/bootstrap-modal.js"></script>
+    <script src="../lib/js/bootstrap-twipsy.js"></script>
+    <script src="../lib/js/bootstrap-popover.js"></script>
 
     <!-- Le fav and touch icons -->
     <link rel="shortcut icon" href="images/favicon.ico">
     <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
     <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
     <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+
+<script>
+
+$(document).ready(function() {
+  //sample JSON for the testing the editor
+  var exhibit_json = {
+    items: [
+      {
+         label: "Mateo",
+        type: "Student",
+        age: 19,
+      },
+
+      {
+        label: "Zach",
+        type: "Student",
+        age: 20,
+      },
+      {
+        label: "MIT",
+        type: "School",
+      }
+    ],
+    types: {
+      Student: {},
+      School: {},
+    }
+  };
+  
+  //call with JSON exhibit data. Builds and displays an html table.
+  var tabulate_json = function(ex_json_data, cb) {
+    var ex_json_obj = JSON.parse(ex_json_data);
+    $("#item-list").prepend(
+      function() {
+        var table = $("<table></table>").append(
+          function() {
+            var s = "";
+            ex_json_obj.items.forEach(function(element, index, ar) {
+              s += "<tr><td class='ex-label'>" + element.label + "</td><td>" + element.type + "</td><td><a href='edit-data-item' id='edit_" + element.label + "' class='edit'><img style='margin-left: 5px; vertical-align: middle' src='../lib/img/pencil_16.png' /></a><a href='#' id='trash_" + element.label + "' class='trash'><img style='margin-left: 5px; vertical-align: middle' src='../lib/img/trash_16.png' /></a></td></tr>";
+            });
+            return s;
+          }
+        ).attr({
+          id: "item-table" 
+        });
+        return table;
+      }
+    );
+
+    cb();
+  }
+  
+var table_scripts = function() { 
+  //If the user clicks a button to add data, add a row to the data table with text inputs 
+  $("#add-data-btn").click(function() {
+   $("#item-table").append(
+     $("<tr></tr>").append("<td><input type='text'></input></td><td><input type='text'></input></td><td></td>"));
+   $("#save").css("display", "inline");
+   $("#cancel").css("display", "inline");
+   return false; 
+  });
+
+  $('#item-list tr').popover({
+    html: true,
+    //return value of 'label'
+    title: function() {
+      return $('.ex-label', this).html();
+    },
+    //return table containing key-value attributes
+    content: function() {
+      var label = $('.ex-label', this).html();
+      html = "<table>";
+      exhibit_json.items.forEach(function(element, index, ar) {
+        if(element.label == label) {
+          for(var i in element) {
+            html += "<tr><td>" + i + "</td><td>" + element[i] + "</td></tr>";
+          }
+        }
+      });
+      html += "</table>";
+      return html;
+    },
+  });
+  
+  //Prompt if the user wants to cancel edits without saving. If so, remove the added rows.
+  $('#cancel').click(function() {
+
+  });
+  
+  //Prompt if the user wants to delete the given item. If so, remove the item.
+  $('.trash').click(function() {
+    $('#confirm-modal  #message').html('This will delete the item. Are you sure you want to continue?');
+    $('#confirm-modal').modal('toggle');
+    var id = /\w+_(\w+)/.exec($(this).attr('id'))[0];
+    console.log(id);
+
+    return false;
+  });
+}
+
+//bootstrap-modal.js handlers
+$("#confirm-modal").modal({keyboard: true, backdrop: true});
+$('#cancel-modal').click(function() {
+  $(this).parents('#confirm-modal').modal('hide'); 
+  return false;
+});
+$('#continue-modal').click(function() {
+  
+  return false;
+});
+
+  tabulate_json(JSON.stringify(exhibit_json), table_scripts);
+});
+</script>
   </head>
 
   <body>
@@ -37,23 +154,30 @@
 <p>Note: the pieces that will get injected into the DP Build are between the <code>EDITOR-BEGIN</code> and <code>EDITOR-END</code> tags.
 <p>Goal is to have a modal interface: we start out with the list of data items (and the add data item button)
 <p><ul><li>If they press trash, they get a confirmation alert that, if YES, will delete the item.
-<li>If they press pencil, it opens editor
+<li>If they press pencil, it opens editor</li>
 <hr />
-<!-- EDITOR-BEGIN -->
-<ul>
-  <li>Trip
-      <img style="margin-left: 5px; vertical-align: middle" src="../lib/img/pencil_16.png" />
-      <img style="margin-left: 5px; vertical-align: middle" src="../lib/img/trash_16.png" /></li>
-  <li>Hike
-      <img style="margin-left: 5px; vertical-align: middle" src="../lib/img/pencil_16.png" />
-      <img style="margin-left: 5px; vertical-align: middle" src="../lib/img/trash_16.png" /></li>
-  <li style="list-style-type: none; margin-top: 10px;"><a href="#" class="btn small">Add new data item</a>
 </ul>
-<h3>Add New Data Item</h3>
-
-<div class="actions">
-   <input type="submit" class="btn primary" value="Save changes">&nbsp;<button type="reset" class="btn">Cancel</button>
+<!-- EDITOR-BEGIN -->
+<div class='modal' id='confirm-modal' style='display: none'>
+  <div class='modal-header'>
+    <a href='#' class='close'>x</a> 
+  </div>
+  <div class='modal-body'>
+    <div id="message"></div>
+  </div>
+  <div class='modal-footer'>
+    <button id="cancel-modal"  type="reset" class="btn">Cancel</button>
+    <button id="continue-modal"  type="reset" class="btn">Continue</button>
+  </div>
 </div>
+
+  <h3>Add New Data Item</h3>
+<div class="span11" id="item-list">
+  <a href="#new-data-item" id="add-data-btn" class="btn small">Add new data item</a>
+  <input style="display: none" type="submit" id="save" class="btn primary" value="Save changes">&nbsp;
+  <button id="cancel" style="display: none" type="reset" class="btn">Cancel</button>
+</div>
+
 <!-- EDITOR-END -->
 
 
