@@ -49,7 +49,14 @@ Then the code
     ##INCLUDE:viz-editor/editor.html:BAR
     HTML;
 
-Would result in the `$editorHtml` variable getting set to `<p>Hi</p>`
+Would result in the following output PHP segment
+
+    $editorHtml = <<<HTML
+    <!-- begin-snippit:BAR -->
+    <p>Hi</p>
+    <!-- end-snippit:BAR -->
+    HTML;
+
 ### Original Codebase
 
 The github-hosted code here is a rewrite of the original [original Datapress plugin](http://code.google.com/p/datapress), hosted on Google Code.
