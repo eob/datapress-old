@@ -51,7 +51,7 @@ Let's say we have the following files:
       </body>
     </html>
 
-**plutin/viz-editor.php**
+**plugin/viz-editor.php**
 
     $editorHtml = <<<HTML
     ##INCLUDE:viz-editor/editor.html:hello
