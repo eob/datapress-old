@@ -15,7 +15,7 @@ To run Datapress:
 To compile Datapress manually:
 
    * Clone this repository
-   * Run `python package.py --blast --o WP_ROOT/wp-content/plugins/datapress
+   * Run `python package.py --blast --o WP_ROOT/wp-content/plugins/datapress`
 
 ... but please note that the Github version of Datapress does not yet contain all the features of the original version
 
