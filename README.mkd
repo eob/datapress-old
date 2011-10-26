@@ -57,7 +57,7 @@ Let's say we have the following files:
     ##INCLUDE:viz-editor/editor.html:hello
     HTML;
 
-The packager script would rewrite `vis-editor.php` so that it contains the following code:
+The packager script would rewrite `viz-editor.php` so that it contains the following code:
 
     $editorHtml = <<<HTML
     <!-- begin-snippit:hello -->
