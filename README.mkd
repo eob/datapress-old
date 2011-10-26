@@ -6,11 +6,18 @@ Datapress provides rich, interactive data visualization and sharing capabilities
 Running
 -------
 
-To run datapress:
+To run Datapress:
 
    * Visit [our page](https://wordpress.org/extend/plugins/datapress/) on the Wordpress Plugin site
    * Download the most recent version
    * Unzip the file into your Wordpress plugin directory (`WP_ROOT/wp-content/plugins`)
+
+To compile Datapress manually:
+
+   * Clone this repository
+   * Run `python package.py --blast --o WP_ROOT/wp-content/plugins/datapress
+
+... but please note that the Github version of Datapress does not yet contain all the features of the original version
 
 Notes for Developers
 --------------------
