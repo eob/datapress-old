@@ -1,33 +1,28 @@
 <?
 class DatapressVizEditor {
- 
+
   function Bootup() {
     // Add the exhibit button 
-    add_action("admin_init", array($this, 'RegisterMetaBoxes'));
-  }
- 
-  function RegisterMetaBoxes() {
-    foreach (array('post','page') as $type) {
-      add_meta_box('datapress_data_editor',
-                   'Add Data',
-                   array($this, 'DisplayEditor'),
-                   $type,
-                   'normal',
-                   'high');
-    }
-    add_action('save_post', array($this, 'SaveData'));
+    add_action('media_buttons', array($this, 'InsertEditorButtons'));
+    add_action('wp_ajax_datapress_editor', array($this, 'OpenInClient'));
   }
 
-  function DisplayEditor() {
-    $editorHtml = <<<HTML
-##INCLUDE:../viz-editor/editor.html:EDITOR
+  function InsertEditorButtons() {
+    $editorLink = wp_guess_url() . "/wp-admin/admin-ajax.php?action=datapress_edtor";
+    $imgLink = wp_guess_url() . "/wp-content/plugins/datapress/images/editor-button.png";
+    $button = <<<HTML
+Visualization 
+<a id="loadDatapressjditor" href="$editorLink" class="thickbox" title="Add an Exhibit"><img src="$imgLink" /></a> 
 HTML;
-   echo $editorHtml; 
+    echo $button;
   }
 
-  function SaveData() {
-   // The user is saving a post. So save the data from the data editor here.
+  function OpenInClient() {
   }
+
+  function SaveConfiguration() {
+  }
+
 
 }
 ?>
