@@ -24,37 +24,45 @@ Notes for Developers
 
 ### Building the Plugin
 
-Datapress has a package script that takes the code in this repository and assembles the plugin. The reason for this is that, for testing reasons, it is easier to develop some portions of the plugin as stand-alone web pages, and then to have the important pieces of these pages ripped out and injected into the plugin code. This also helps us enforce a nice client/server separation of components.
+Datapress has a package script that takes the code in this repository and assembles the plugin. The reason for this is that, for testing reasons, it is easier to develop some portions of the plugin as stand-alone web pages, and then to have the important pieces (called *snippits*) of these pages ripped out and injected into the plugin code. This also helps us enforce a nice client/server separation of components.
 
 The packager script will help you develop while testing against a live WordPress installation. To do so, create the directory `$WP_ROOT/wp-content/plugins/datapress`. Then, any time you want to deploy the latest version of your code to that directory, run:
 
     python package.py --blast --outputdir $WP_ROOT/wp-content/plugins/datapress
 
-The script will remove the existing directory (the `--blast` option), copy in the `plugin-scaffold` directory, and then compile in the remaining files necessary for the plugin. The "compilation" step is simple string substitution. The script will iterate over all .php files in the output directory and search for the pattern `##INCLUDE:{file}:{region}` and performa a string substitution from the appropriate place. The file spec is relative to the root of the project.
+The script will remove the existing directory (the `--blast` option), copy in the `plugin` directory, and then inject any snippits these files reference. This snippit injection step is simple string substitution. The script will iterate over all .php files in the output directory and search for the pattern `##INCLUDE:{file}:{snippit}`. It will then look for the file `file`, relative to the project root, and search within it for the specfied snippit. 
 
-Regions are defined within HTML comment tags.
+Snippits are defined within HTML comment tags.
     
     <!-- begin-snippit:{REGION NAME} -->
     <!-- end-snippit:{REGION NAME} -->
 
-So, for eample, if some file in `viz-editor/foo.html' had the following spec:
+### Snippit Example
 
-    <!-- begin-snippit:BAR -->
-    <p>Hi</p>
-    <!-- end-snippit:BAR -->
+Let's say we have the following files:
 
-Then the code
-    
+**viz-editor/editor.html**
+
+    <html>
+      <body>
+        <!-- begin-snippit:hello -->
+        <p>Hi</p>
+        <!-- end-snippit:hello -->
+      </body>
+    </html>
+
+**plutin/viz-editor.php**
+
     $editorHtml = <<<HTML
-    ##INCLUDE:viz-editor/editor.html:BAR
+    ##INCLUDE:viz-editor/editor.html:hello
     HTML;
 
-Would result in the following output PHP segment
+The packager script would rewrite `vis-editor.php` so that it contains the following code:
 
     $editorHtml = <<<HTML
-    <!-- begin-snippit:BAR -->
+    <!-- begin-snippit:hello -->
     <p>Hi</p>
-    <!-- end-snippit:BAR -->
+    <!-- end-snippit:hello -->
     HTML;
 
 ### Original Codebase
