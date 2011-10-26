@@ -27,19 +27,19 @@ The script will remove the existing directory (the `--blast` option), copy in th
 
 Regions are defined within HTML comment tags.
     
-    <!-- begin-region:{REGION NAME} -->
-    <!-- end-region:{REGION NAME} -->
+    <!-- begin-snippit:{REGION NAME} -->
+    <!-- end-snippit:{REGION NAME} -->
 
 So, for eample, if some file in `viz-editor/foo.html' had the following spec:
 
-    <!-- begin-region:BAR -->
+    <!-- begin-snippit:BAR -->
     <p>Hi</p>
-    <!-- end-region:BAR -->
+    <!-- end-snippit:BAR -->
 
 Then the code
     
     $editorHtml = <<<HTML
-    ##INCLUDE:../viz-editor/editor.html:EDITOR
+    ##INCLUDE:viz-editor/editor.html:BAR
     HTML;
 
 Would result in the `$editorHtml` variable getting set to `<p>Hi</p>`
