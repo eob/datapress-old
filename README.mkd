@@ -10,12 +10,12 @@ To run Datapress:
 
    * Visit [our page](https://wordpress.org/extend/plugins/datapress/) on the Wordpress Plugin site
    * Download the most recent version
-   * Unzip the file into your Wordpress plugin directory (`WP_ROOT/wp-content/plugins`)
+   * Unzip the file into your Wordpress plugin directory (`$WP_ROOT/wp-content/plugins`)
 
 To compile Datapress manually:
 
    * Clone this repository
-   * Run `python package.py --blast --o WP_ROOT/wp-content/plugins/datapress`
+   * Run `python package.py --blast --o $WP_ROOT/wp-content/plugins/datapress` from the `packager` directory
 
 ... but please note that the Github version of Datapress does not yet contain all the features of the original version
 
@@ -26,9 +26,9 @@ Notes for Developers
 
 Datapress has a package script that takes the code in this repository and assembles the plugin. The reason for this is that, for testing reasons, it is easier to develop some portions of the plugin as stand-alone web pages, and then to have the important pieces of these pages ripped out and injected into the plugin code. This also helps us enforce a nice client/server separation of components.
 
-The packager script will help you develop while testing against a live WordPress installation. To do so, create the directory `WP_ROOT/wp-content/plugins/datapress`. Then, any time you want to deploy the latest version of your code to that directory, run:
+The packager script will help you develop while testing against a live WordPress installation. To do so, create the directory `$WP_ROOT/wp-content/plugins/datapress`. Then, any time you want to deploy the latest version of your code to that directory, run:
 
-    python package.py --blast --outputdir WP_ROOT/wp-content/plugins/datapress
+    python package.py --blast --outputdir $WP_ROOT/wp-content/plugins/datapress
 
 The script will remove the existing directory (the `--blast` option), copy in the `plugin-scaffold` directory, and then compile in the remaining files necessary for the plugin. The "compilation" step is simple string substitution. The script will iterate over all .php files in the output directory and search for the pattern `##INCLUDE:{file}:{region}` and performa a string substitution from the appropriate place. The file spec is relative to the root of the project.
 
