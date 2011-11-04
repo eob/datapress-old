@@ -29,17 +29,23 @@
 <script>
 
 $(document).ready(function() {
-  var sample_schema = {
-    types: {
-      School: {},
-      Student: {},
-    },
-    properties: {
-      prop1: {},
-      prop2: {},
-      prop3: {},
-    }
-  }
+//schema for the editor
+  var sample_schemas = [
+  { name: 'School',
+  	fields: [
+		{name: 'name', type: 'string', order: 1},
+		{name: 'address', type: 'string', order: 2},
+		{name: 'level', type: 'string', order: 3},
+	],
+  },
+  {name: 'Student',
+  	fields: [
+		{name: 'name', type: 'string', order: 1},
+		{name: 'age', type: 'int', order: 2},
+		{name: 'school', type: 'School', order: 3},
+  	],
+  },
+  ]
   //sample JSON for the testing the editor
   var exhibit_json = {
     items: [
@@ -65,18 +71,18 @@ $(document).ready(function() {
     }
   };
 
-//Create the data-editing table inside the editor DOM element.
+//Function to create the data-editing table inside the editor DOM element.
 //schema: keys to use
 //data (optional): values 
  var initEditor = function(editor, schema, data) {
    $("<table></table>").append(function() {
     html = "<tr><td>Type</td><td><select>";
-    Object.keys(schema.types).forEach(function(element, index, ar) {
+    Object.keys(schema.fields).forEach(function(element, index, ar) {
       html += "<option value='" + element + "'>" + element + "</option>";
     });
     html += "</select></td></tr>";
 
-    Object.keys(schema.properties).forEach(function(element, index, ar){
+    Object.keys(schema.fields).forEach(function(element, index, ar){
       html += "<tr><td>" + element + "</td><td><input type='text'></input></td></tr>";
     });
 
@@ -84,6 +90,17 @@ $(document).ready(function() {
    }).appendTo(editor);
  }
 
+//Load the supplied schemas into the editor
+(function loadSchemas() {
+	$('#schema-select').append(function(){
+		html = '';
+		for(var i in sample_schemas) {
+			html += "<option value='" + sample_schemas[i].name + "'>" + sample_schemas[i].name + "</option>";	
+		}
+		return html;
+		console.log(html)
+	});
+})();
 
   //call with JSON exhibit data. Builds and displays an html table.
   var tabulate_json = function(ex_json_data, cb) {
@@ -116,7 +133,11 @@ var table_scripts = function() {
    $("#save").css("display", "inline");
    $("#cancel").css("display", "inline");
    */
-   initEditor($('#ex-data-editor'), sample_schema);
+
+   //Figure out which schema is selected, then call initEditor with that schema
+   var schema = $('#schema-select').html()
+
+   initEditor($('#ex-data-editor'), sample_schemas);
    return false; 
   });
 
@@ -169,6 +190,8 @@ $('#continue-modal').click(function() {
 });
 
   tabulate_json(JSON.stringify(exhibit_json), table_scripts);
+
+
 });
 </script>
   </head>
@@ -205,6 +228,9 @@ $('#continue-modal').click(function() {
 
   <h3>Add New Data Item</h3>
 <div class="span11" id="item-list">
+  <select id='schema-select'>
+ 	 
+  </select>
   <a href="#new-data-item" id="add-data-btn" class="btn small">Add new data item</a>
   <input style="display: none" type="submit" id="save" class="btn primary" value="Save changes">&nbsp;
   <button id="cancel" style="display: none" type="reset" class="btn">Cancel</button>
