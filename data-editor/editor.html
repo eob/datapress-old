@@ -29,6 +29,17 @@
 <script>
 
 $(document).ready(function() {
+  var sample_schema = {
+    types: {
+      School: {},
+      Student: {},
+    },
+    properties: {
+      prop1: {},
+      prop2: {},
+      prop3: {},
+    }
+  }
   //sample JSON for the testing the editor
   var exhibit_json = {
     items: [
@@ -53,7 +64,27 @@ $(document).ready(function() {
       School: {},
     }
   };
-  
+
+//Create the data-editing table inside the editor DOM element.
+//schema: keys to use
+//data (optional): values 
+ var initEditor = function(editor, schema, data) {
+   $("<table></table>").append(function() {
+    html = "<tr><td>Type</td><td><select>";
+    Object.keys(schema.types).forEach(function(element, index, ar) {
+      html += "<option value='" + element + "'>" + element + "</option>";
+    });
+    html += "</select></td></tr>";
+
+    Object.keys(schema.properties).forEach(function(element, index, ar){
+      html += "<tr><td>" + element + "</td><td><input type='text'></input></td></tr>";
+    });
+
+    return html;
+   }).appendTo(editor);
+ }
+
+
   //call with JSON exhibit data. Builds and displays an html table.
   var tabulate_json = function(ex_json_data, cb) {
     var ex_json_obj = JSON.parse(ex_json_data);
@@ -80,10 +111,12 @@ $(document).ready(function() {
 var table_scripts = function() { 
   //If the user clicks a button to add data, add a row to the data table with text inputs 
   $("#add-data-btn").click(function() {
-   $("#item-table").append(
+   /*$("#item-table").append(
      $("<tr></tr>").append("<td><input type='text'></input></td><td><input type='text'></input></td><td></td>"));
    $("#save").css("display", "inline");
    $("#cancel").css("display", "inline");
+   */
+   initEditor($('#ex-data-editor'), sample_schema);
    return false; 
   });
 
@@ -119,7 +152,6 @@ var table_scripts = function() {
     $('#confirm-modal  #message').html('This will delete the item. Are you sure you want to continue?');
     $('#confirm-modal').modal('toggle');
     var id = /\w+_(\w+)/.exec($(this).attr('id'))[0];
-    console.log(id);
 
     return false;
   });
@@ -178,10 +210,11 @@ $('#continue-modal').click(function() {
   <button id="cancel" style="display: none" type="reset" class="btn">Cancel</button>
 </div>
 
+<div id='ex-data-editor' class='span11'></div>
 <!-- EDITOR-END -->
 
+</div>
 
-      </div>
 
       <footer>
         <p>&copy; Company 2011</p>
