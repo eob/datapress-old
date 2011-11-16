@@ -29,6 +29,27 @@
 <script>
 
 $(document).ready(function() {
+//schema for the editor
+  var sample_schemas = {
+    School: { 
+      name: 'School',
+      fields: [
+        {name: 'label', type: 'string', order: 0},
+        {name: 'name', type: 'string', order: 1},
+        {name: 'address', type: 'string', order: 2},
+        {name: 'level', type: 'string', order: 3},
+      ],
+    },
+    Student: { 
+      name: 'Student',
+      fields: [
+        {name: 'label', type: 'string', order: 0},
+        {name: 'name', type: 'string', order: 1},
+        {name: 'age', type: 'int', order: 2},
+        {name: 'school', type: 'School', order: 3},
+      ],
+    },
+  };
   //sample JSON for the testing the editor
   var exhibit_json = {
     items: [
@@ -53,9 +74,135 @@ $(document).ready(function() {
       School: {},
     }
   };
+
+
+  //Handler for clicks on the trash icon
+  var trashHandler = function() {
+    var id = /\w+_(\w+)/.exec($(this).attr('id'))[0];
+    var label = id.substring(id.indexOf('_') + 1);
+    $('#continue-modal').click(id, function(e) {
+      $('#' + e.data).closest('tr').remove();
+      $(this).parents('#confirm-modal').modal('hide');
+      return false;
+    });
+    $('#confirm-modal  #message').html('This will delete the item. Are you sure you want to continue?');
+    $('#confirm-modal').modal('toggle');
+    return false;
+  };
+  //Handler for clicks on the edit icon
+  var editHandler = function(e) {
+    var schemas = e.data;
+    e.preventDefault();
+    var type = $(this).parents().siblings('.ex-type').html();
+    var label = $(this).attr('id');
+    label = label.substring(label.indexOf('_') + 1);
+    exhibit_json.items.forEach(function(element, index, ar) {
+      if(element.label == label) {
+        initEditor($('#ex-data-editor'), schemas[type], element);
+      }
+    });
+    return false;
+  }
+
+//Function to create the data-editing table inside the editor DOM element.
+//schema: keys to use
+//data (optional): values in form key=>value
+ var initEditor = function(editor, schema, data) {
+   if(data) {
+      var edit = true;
+   } else {
+      var edit = false;
+   }
+   $("<table></table>").append(function() {
+    html = "<tr><td>Type</td><td>" + schema.name + "</td></tr>";
+    
+    for(var i = 0; i < schema.fields.length; i++) {
+      var element = schema.fields[i];
+
+      //For when data is not null
+      if(edit && element.name in data) {
+        html += "<tr><td>" + element.name + "</td><td><input class='ex-data-field' id='ex-data-field_" + element.name + "' type='text' value='" + data[element.name] + "'></td></tr>";
+      } else {
+
+        html += "<tr><td>" + element.name + "</td><td><input class='ex-data-field' id='ex-data-field_" + element.name + "' type='text'></input></td></tr>";
+      }
+    }
+    return html;
+   }).appendTo(editor.children('form'));
+   
+   $("#save").css("display", "inline");
+   $("#cancel").css("display", "inline");
   
+  //Data editor form handler. Saves the data and adds it to the table.
+  editor.children('form').submit(function() {
+    var newData = {type: schema.name};
+    $(this).find('.ex-data-field').each(function(index, element) {
+      var attrId = $(element).attr('id') 
+      var attr = attrId.substring(attrId.indexOf('_') + 1);
+    
+      newData[attr] = $(element).val();
+    });
+    addExDataItem(newData, edit, sample_schemas);
+    $(this).unbind('submit');
+  });
+ }
+
+//Load the supplied schemas into the editor
+var loadSchemas = function() {
+	$('#schema-select').append(function(){
+		html = '';
+		for(var i in sample_schemas) {
+			html += "<option value='" + sample_schemas[i].name + "'>" + sample_schemas[i].name + "</option>";	
+		}
+		return html;
+	});
+};
+
+//Add the data Item to the table from the data editor
+var addExDataItem = function(data, edit, schemas) {
+  //add to json
+  if(edit) {
+    exhibit_json.items.forEach(function(element, index, ar) {
+      if(element.label == data.label) {
+        exhibit_json.items[index] = data;  
+      } 
+    });
+  } else {
+    exhibit_json.items.push(data);
+    $('#item-table').append(function() {
+      html = "<tr><td class='ex-label'>" + data.label + "</td><td class='ex-type'>" + data.type + "</td><td><a href='edit-data-item' id='edit_" + data.label + "' class='edit'><img style='margin-left: 5px; vertical-align: middle' src='../lib/img/pencil_16.png' /></a><a href='#' id='trash_" + data.label + "' class='trash'><img style='margin-left: 5px; vertical-align: middle' src='../lib/img/trash_16.png' /></a></td></tr>";
+      return html;
+    });
+    //Add click handlers
+    $('#trash_' + data.label).click(trashHandler);
+    $('#edit_' + data.label).click(schemas, editHandler); 
+    //On hover, display table
+    $('#item-list tr').popover({
+      html: true,
+      //return value of 'label'
+      title: function() {
+        return $('.ex-label', this).html();
+      },
+      //return table containing key-value attributes
+      content: function() {
+        var label = $('.ex-label', this).html();
+        html = "<table>";
+        exhibit_json.items.forEach(function(element, index, ar) {
+          if(element.label == label) {
+            for(var i in element) {
+              html += "<tr><td>" + i + "</td><td>" + element[i] + "</td></tr>";
+            }
+          }
+        });
+        html += "</table>";
+        return html;
+      },
+    });
+  }
+}
+
   //call with JSON exhibit data. Builds and displays an html table.
-  var tabulate_json = function(ex_json_data, cb) {
+  var tabulate_json = function(ex_json_data, cb, schemas) {
     var ex_json_obj = JSON.parse(ex_json_data);
     $("#item-list").prepend(
       function() {
@@ -63,7 +210,7 @@ $(document).ready(function() {
           function() {
             var s = "";
             ex_json_obj.items.forEach(function(element, index, ar) {
-              s += "<tr><td class='ex-label'>" + element.label + "</td><td>" + element.type + "</td><td><a href='edit-data-item' id='edit_" + element.label + "' class='edit'><img style='margin-left: 5px; vertical-align: middle' src='../lib/img/pencil_16.png' /></a><a href='#' id='trash_" + element.label + "' class='trash'><img style='margin-left: 5px; vertical-align: middle' src='../lib/img/trash_16.png' /></a></td></tr>";
+              s += "<tr><td class='ex-label'>" + element.label + "</td><td class='ex-type'>" + element.type + "</td><td><a href='edit-data-item' id='edit_" + element.label + "' class='edit'><img style='margin-left: 5px; vertical-align: middle' src='../lib/img/pencil_16.png' /></a><a href='#' id='trash_" + element.label + "' class='trash'><img style='margin-left: 5px; vertical-align: middle' src='../lib/img/trash_16.png' /></a></td></tr>";
             });
             return s;
           }
@@ -74,19 +221,22 @@ $(document).ready(function() {
       }
     );
 
-    cb();
+    cb(schemas);
   }
-  
-var table_scripts = function() { 
-  //If the user clicks a button to add data, add a row to the data table with text inputs 
+
+//Initialize handlers for table clicks.
+var table_scripts = function(schemas) {
+  //call initEditor with the Schema they've chosen to add
   $("#add-data-btn").click(function() {
-   $("#item-table").append(
-     $("<tr></tr>").append("<td><input type='text'></input></td><td><input type='text'></input></td><td></td>"));
-   $("#save").css("display", "inline");
-   $("#cancel").css("display", "inline");
+
+   //Figure out which schema is selected, then call initEditor with that schema
+   var schema = schemas[$('#schema-select option:selected').val()];
+
+   initEditor($('#ex-data-editor'), schema);
    return false; 
   });
-
+  
+  //On hover, display table
   $('#item-list tr').popover({
     html: true,
     //return value of 'label'
@@ -111,18 +261,21 @@ var table_scripts = function() {
   
   //Prompt if the user wants to cancel edits without saving. If so, remove the added rows.
   $('#cancel').click(function() {
-
+    $('#ex-data-editor-form').html('');
+    $('#cancel').css('display', 'none');
+    $('#save').css('display', 'none');
+  });
+  
+  //If the user saves the data they've added, submit the form
+  $('#save').click(function() {
+    $('#ex-data-editor-form').submit();
   });
   
   //Prompt if the user wants to delete the given item. If so, remove the item.
-  $('.trash').click(function() {
-    $('#confirm-modal  #message').html('This will delete the item. Are you sure you want to continue?');
-    $('#confirm-modal').modal('toggle');
-    var id = /\w+_(\w+)/.exec($(this).attr('id'))[0];
-    console.log(id);
+  $('.trash').click(trashHandler);
+  //When a user edits an item, call initEditor and pass in the existing data for that item.
+  $('.edit').click(schemas, editHandler);
 
-    return false;
-  });
 }
 
 //bootstrap-modal.js handlers
@@ -131,12 +284,11 @@ $('#cancel-modal').click(function() {
   $(this).parents('#confirm-modal').modal('hide'); 
   return false;
 });
-$('#continue-modal').click(function() {
   
-  return false;
-});
+  loadSchemas();
+  tabulate_json(JSON.stringify(exhibit_json), table_scripts, sample_schemas);
 
-  tabulate_json(JSON.stringify(exhibit_json), table_scripts);
+
 });
 </script>
   </head>
@@ -173,13 +325,24 @@ $('#continue-modal').click(function() {
 
   <h3>Add New Data Item</h3>
 <div class="span11" id="item-list">
+  <select id='schema-select'>
+ 	 
+  </select>
   <a href="#new-data-item" id="add-data-btn" class="btn small">Add new data item</a>
+</div>
+</div>
+<div class="row">
+<h3>Data Editor</h3>
+<div id='ex-data-editor' class='span11'><form id='ex-data-editor-form' action='#'></form></div>
+  <div class='span11'>
   <input style="display: none" type="submit" id="save" class="btn primary" value="Save changes">&nbsp;
   <button id="cancel" style="display: none" type="reset" class="btn">Cancel</button>
+  </div>
+</div>
+<!-- EDITOR-END -->
+
 </div>
 <!-- end-snippit:data-editor-list -->
-
-      </div>
 
       <footer>
         <p>&copy; Company 2011</p>
