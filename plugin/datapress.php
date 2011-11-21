@@ -9,7 +9,7 @@ Author URI: http://haystack.csail.mit.edu/
 */
 
 include_once("data-editor.php");
-include_once("viz-editor.php");
+//include_once("viz-editor.php");
 
 class Datapress {
   
@@ -17,12 +17,12 @@ class Datapress {
   var $data_editor;
 
   function Datapress() {
-    $this->viz_editor = new DatapressVizEditor();
+ //   $this->viz_editor = new DatapressVizEditor();
     $this->data_editor = new DatapressDataEditor();
   }
 
   function Bootup() {
-    $this->viz_editor->Bootup();
+  //  $this->viz_editor->Bootup();
     $this->data_editor->Bootup();
   }
 }
