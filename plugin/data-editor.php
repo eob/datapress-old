@@ -1,4 +1,23 @@
 <?php
+
+/*
+ * Big Todo list:
+ *
+ * 0. Prefix the CSS so that you won't hijack wordpress styles
+ * 1. Plugin activation: create the tables in the DB if not exist
+ * 2. Admin head: print out the schemas
+ * 3. After the post save (so when a new post has an ID now)
+ *    - blow away associated data items
+ *    - save all data items in the form
+ * 4. On admin head or the data editor body, print out the table of existing data items
+ *
+ * --> fully functional w/o ability to add new schema items or fetch feed of data
+ *
+ * 5. Data feed -> create URL which queries the data items (all, to start.. eventually we'll have filters)
+ *    and prints it in exhibit format.
+ * 6. schema editor on plugin options page
+ *
+ */
 class DatapressDataEditor {
 
   /*
@@ -48,20 +67,29 @@ class DatapressDataEditor {
    */
   function CreateTableIfNotExist() {
     // TODO: Check if tables above exist. If not, create them.
+    // TODO: Add a few example schemas (ex: book, class, whatevs)
   }
 
+  /*
+   * This function gets called inside the <HEAD> element of a logged in author.
+   * Anything echoed here goes into the <HEAD>
+   */
   function AdminHead() {
 
     if (!$guessurl = site_url())
       $guessurl = wp_guess_url();
     $baseuri = $guessurl;
     $pluginUrl = trailingslashit( get_bloginfo('wpurl') ).PLUGINDIR.'/datapress';
-
+    // TOOD:
+    // load schemas from db table
     $headHtml = <<<HTML
 <script type='text/javascript' src='$pluginUrl/lib/js/bootstrap-modal.js'></script>
 <script type='text/javascript' src='$pluginUrl/lib/js/bootstrap-twipsy.js'></script>
 <script type='text/javascript' src='$pluginUrl/lib/js/bootstrap-popover.js'></script>
 <link href="$pluginUrl/lib/css/bootstrap.min.css" rel="stylesheel" />
+<script>
+// Schema stuff could go here.
+</script>
 HTML;
     echo($headHtml);
   }
