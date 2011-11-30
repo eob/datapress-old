@@ -27,6 +27,28 @@ class DatapressDataEditor {
     add_action('save_post', array($this, 'SaveData'));
   }
 
+  function Install() {
+    $this->CreateTableIfNotExist(); 
+  }
+
+  /*
+   * Creates the table to store the bits of data associated with each post
+   * Table 1: Schemas
+   *   * id (int)
+   *   * name (varchar)
+   *   * fields (string -- contains json)
+   *
+   * Table 2: Instances
+   *   * id (int)
+   *   * post_id (int)
+   *   * schema_id (int, may be 0 if free-hand)
+   *   * type (varchar, replicated here because they may have made it up on spot)
+   *   * fields (string -- contains json)
+   *
+   */
+  function CreateTableIfNotExist() {
+    // TODO: Check if tables above exist. If not, create them.
+  }
 
   function AdminHead() {
 

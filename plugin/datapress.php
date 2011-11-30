@@ -22,12 +22,18 @@ class Datapress {
   }
 
   function Bootup() {
-  //  $this->viz_editor->Bootup();
+    register_activation_hook(__FILE__, array($this, 'Install'));
+    //  $this->viz_editor->Bootup();
     $this->data_editor->Bootup();
+  }
+
+  function Install() {
+    $this->data_editor->Install();
   }
 }
 
 $datapress = new Datapress();
 $datapress->Bootup();
+
 
 ?>
