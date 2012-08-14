@@ -13,9 +13,9 @@
 
     <!-- Le styles -->
     <link href="../lib/css/bootstrap.min.css" rel="stylesheet">
-    <script src="../lib/js/jquery.min.js"></script>
-    <script src="../lib/js/bootstrap-tabs.js"></script>
-    <script src="../lib/js/bootstrap-alerts.js"></script>
+    <link href="../lib/css/bootstrap-responsive.css" rel="stylesheet">
+    <script src="../lib/js/jquery.min.js"></scjipt>
+    <script src="../lib/js/bootstrap.min.js"></script>
 
     <!-- Le fav and touch icons -->
     <link rel="shortcut icon" href="images/favicon.ico">
@@ -34,14 +34,14 @@
       <div class="row">
         
 <!-- EDITOR-BEGIN -->
-<ul class="tabs" data-tabs="tabs">
+<ul class="tabs" data-toggle="tab">
   <li class="active"><a href="#display-options">Display Options</a></li>
   <li><a href="#data-sources">Data Sources</a></li>
   <li><a href="#visualizations">Visualizations</a></li>
   <li><a href="#skins">Skins</a></li>
 </ul>
 <div class="tab-content">
-<div id="display-options" class="active">
+<div id="display-options" class="tab-pane active">
  <form>
   <fieldset>
   <div class="clearfix">
@@ -76,13 +76,17 @@
   </fidleset>
  </form>
 </div><!-- end display options -->
-<div id="data-sources">
+<div id="data-sources" class="tab-pane">
  <h2>Data Sources</h2>
+ <p><i>You have no data sources yet.</i></p>
+  
+
+
 </div><!-- end data sources -->
-<div id="visualizations">
+<div id="visualizations" class="tab-pane">
  <h2>Visualizations</h2>
 </div><!-- end visualizations -->
-<div id="skins">
+<div id="skins" class="tab-pane">
  <h2>Skins</h2>
 </div><!-- end skins -->
 </div><!-- end tab content -->
