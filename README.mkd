@@ -1,6 +1,3 @@
-Datapress
-=========
-
 ![Datapress Logo](http://projects.csail.mit.edu/datapress/wp-content/datapress.png)
 
 Datapress provides rich, interactive data visualization and sharing capabilities for Wordpress blogs.
