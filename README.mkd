@@ -2,6 +2,8 @@
 
 Datapress provides rich, interactive data visualization and sharing capabilities for Wordpress blogs.
 
+Drupal support is on the way.
+
 Running
 -------
 
