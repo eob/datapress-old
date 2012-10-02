@@ -1,0 +1,13 @@
+Datapress
+=========
+
+Datapress provides rich, interactive data visualization and sharing capabilities for Wordpress blogs.
+
+Running
+-------
+
+To run Datapress:
+
+   * Visit [our page](https://wordpress.org/extend/plugins/datapress/) on the Wordpress Plugin site
+   * Download the most recent version
+   * Unzip the file into your Wordpress plugin directory (`$WP_ROOT/wp-content/plugins`)
