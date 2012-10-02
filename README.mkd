@@ -8,8 +8,16 @@ Datapress provides rich, interactive data visualization and sharing capabilities
 Running
 -------
 
-To run Datapress:
+to run Datapress:
 
    * Visit [our page](https://wordpress.org/extend/plugins/datapress/) on the Wordpress Plugin site
    * Download the most recent version
    * Unzip the file into your Wordpress plugin directory (`$WP_ROOT/wp-content/plugins`)
+
+Links
+-----
+
+   * [Home Page](http://projects.csail.mit.edu/datapress)
+   * [Demo Page](http://projects.csail.mit.edu/datapress/demo)
+   * [Plugin page on Wordpress.org](https://wordpress.org/extend/plugins/datapress)
+
