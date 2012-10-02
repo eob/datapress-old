@@ -15,6 +15,6 @@ Links
 -----
 
    * [Home Page](http://projects.csail.mit.edu/datapress)
-   * [Demo Page](http://projects.csail.mit.edu/datapress/demo)
+   * [Demo Page](http://projects.csail.mit.edu/datapress/demosite)
    * [Plugin page on Wordpress.org](https://wordpress.org/extend/plugins/datapress)
 
